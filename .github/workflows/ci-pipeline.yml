@@ -1,0 +1,40 @@
+
+name: CI - Maquina de Cafe TDD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compilar proyecto Java
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo del repositorio
+        uses: actions/checkout@v6
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Verificar Java y Ant
+        run: |
+          java -version
+          ant -version
+
+      - name: Compilar proyecto con Apache Ant
+        run: ant -noinput -buildfile build.xml clean jar
